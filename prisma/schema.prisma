@@ -1,0 +1,33 @@
+//Mostra as configurações do nosso banco
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+//Tudo que vamos criar de tabelas, vamos criar aqui
+generator client {
+  provider = "prisma-client-js"
+}
+
+//Minha tabela usuário
+model User {
+  id         String @id @default(uuid())
+  name       String
+  github_id  Int
+  avatar_url String
+  login      String
+
+  messages Message[]
+  @@map("users")
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  text       String
+  created_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+
+  user_id String
+  @@map("messages")
+}
